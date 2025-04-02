@@ -1,0 +1,10 @@
+disk_cleaner:
+  ordinary:
+    garbage:
+      - '~/.V2rayU/v2ray-core.log'
+      - '~/.python_history'
+      - '/root/x'
+  deep:
+    garbage:
+      - '~/.zsh_history'
+      - '~/.zcompdump*'   # cache file for zsh used to accelerate the command completion feature.
