@@ -21,9 +21,6 @@ def deep_clean():
     print('[disk_cleaner] Will do deep clean ...')
     time.sleep(1)
     print()
-    print('[disk_cleaner] End.')
-    print()
-
     # The deep clean including the ordinary clean.
     garbage_names = disk_cleaner_cfs['ordinary']['garbage'] + disk_cleaner_cfs['deep']['garbage']
     __do_clean(garbage_names)

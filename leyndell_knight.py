@@ -1,5 +1,6 @@
 import sys
 from colorama import Fore, Style
+from oss_helper import interface as oss_helper_interface
 from disk_cleaner import interface as disk_cleaner_interface
 from typing import List
 
@@ -19,16 +20,25 @@ def __disk_cleaner_handle(sub_args: List[str]):
     exit(1)
 
 
+def __oss_handle(sub_args: List[str]):
+    oss_helper_interface.handle(sub_args)
+
+
 __handlers = {
     'dc': __disk_cleaner_handle,
+    'oss': __oss_handle,
 }
 
 if __name__ == '__main__':
+    # lk oss
+    # length of (lk oss) is 2
+    # so the length of args must >= 2.
     __argv = sys.argv
     if len(__argv) < 2:
         print(f'{Fore.RED}[leyndell_knight] Args Error.{Style.RESET_ALL}')
         exit(1)
 
+    # __handler_name: oss
     __handler_name = __argv[1]
     __sub_args = __argv[2:]
     __handler = __handlers.get(__handler_name, None)

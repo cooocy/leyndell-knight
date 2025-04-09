@@ -3,8 +3,17 @@ disk_cleaner:
     garbage:
       - '~/.V2rayU/v2ray-core.log'
       - '~/.python_history'
-      - '/root/x'
   deep:
     garbage:
       - '~/.zsh_history'
+      - '~/.bash_history'
       - '~/.zcompdump*'   # cache file for zsh used to accelerate the command completion feature.
+
+oss_helper:
+  oss:
+    access_key_id: x
+    access_key_secret: x
+    endpoint: oss-cn-shanghai.aliyuncs.com
+    bucket: x
+
+  log: logs.txt
