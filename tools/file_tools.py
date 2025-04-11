@@ -1,6 +1,5 @@
 import math
 import os.path
-import re
 from pathlib import Path
 from typing import List
 
@@ -24,27 +23,56 @@ def get_parent_full_dir(path: str) -> str:
     return path.replace(f'/{p.name}', '')
 
 
-def find_files_by_regex(regex_path) -> List[str]:
+def split_path(path: str) -> tuple[str, str]:
     """
-    Find files by regex.
-    :param regex_path: e.g. ~/.zcompdump*
+    Split the path into parent dir and file name.
+
+    Args:
+        path (str): The path to split. e.g. /Users/foo/x.png
+
+    Returns:
+        tuple[str, str]: A tuple of (parent dir, file name). e.g. ('/Users/foo', 'x.png')
     """
-    regex_path = os.path.expanduser(regex_path)
-    base_dir = get_parent_full_dir(regex_path)
-    regex_file_name = regex_path.replace(f'{base_dir}/', '')
-    if not os.path.exists(base_dir) or not os.path.isdir(base_dir):
+
+    parent = get_parent_full_dir(path)
+    file_name = path.replace(f'{parent}/', '')
+    return parent, file_name
+
+
+def is_wildcard_path(path: str) -> bool:
+    return '*' in path
+
+
+def find_files_by_wildcard_path(wildcard_path) -> List[str]:
+    """
+    Find files by wildcard path. The wildcard_path can only has one * in the last filename.
+
+    Args:
+        wildcard_path (str): The wildcard path to search for files, must be abs path. e.g. /home/foo/test/*.png
+
+    Returns:
+        List[str]: A list of matching files.
+    """
+
+    parent, son = split_path(wildcard_path)
+    if not os.path.exists(parent) or not os.path.isdir(parent):
         return []
 
-    try:
-        regex = re.compile(regex_file_name)
-    except re.error as e:
-        print(f"Invalid regular expression: {e}")
-        return []
-
+    # List all files (no dir) in the parent directory, and check if the filename matches the wildcard.
     matching_files = []
-    for file in os.listdir(base_dir):
-        file_path = os.path.join(base_dir, file)
-        if regex.search(file_path):
-            matching_files.append(file_path.__str__())
+    for file in os.listdir(parent):
+        this_file = f'{parent}/{file}'
+        if os.path.isfile(this_file):
+            # *.png
+            # abc*.png
+            if '*' == son:
+                matching_files.append(this_file)
+                continue
+            # abc*.png
+            idx_of_wildcard = son.index('*')
+            s1 = son[:idx_of_wildcard]
+            s2 = son[idx_of_wildcard + 1:]
+            if file.startswith(s1) and file.endswith(s2):
+                matching_files.append(this_file)
 
     return matching_files

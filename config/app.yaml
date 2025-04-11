@@ -3,17 +3,28 @@ disk_cleaner:
     garbage:
       - '~/.V2rayU/v2ray-core.log'
       - '~/.python_history'
+      #      - 'a.png'
+      #      - 'b/c/d/x.png'
+      #      - '/a/*/x.png'
+      #      - '/a/b/c/*xxx*'
+      #      - '/a/b/c/*'
+      #      - '/a/b/c/*.png'
+      #      - '/a/b/c/x.*'
+
+
   deep:
     garbage:
       - '~/.zsh_history'
       - '~/.bash_history'
       - '~/.zcompdump*'   # cache file for zsh used to accelerate the command completion feature.
+      - '~/Downloads/*'
+      - '~/kits/leyndell-knight/oss_helper/logs.txt'
 
 oss_helper:
   oss:
     access_key_id: x
     access_key_secret: x
-    endpoint: oss-cn-shanghai.aliyuncs.com
+    endpoint: x
     bucket: x
 
   log: logs.txt
