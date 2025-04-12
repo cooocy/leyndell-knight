@@ -4,6 +4,7 @@ import time
 from colorama import Fore, Style
 from config import disk_cleaner_cfs
 from disk_cleaner import disk_cleaner
+from tools import file_tools
 from typing import List
 
 
@@ -23,7 +24,7 @@ def handle(sub_args: List[str]):
 
 
 def __l1_ordinary_clean():
-    garbage_names = disk_cleaner_cfs['ordinary']['garbage']
+    garbage_names = file_tools.expanduser_and_sort(disk_cleaner_cfs['ordinary']['garbage'])
     __l2_check(garbage_names)
 
     print('[disk_cleaner] Will do ordinary clean ...')
@@ -37,7 +38,8 @@ def __l1_ordinary_clean():
 
 def __l1_deep_clean():
     # The deep clean including the ordinary clean.
-    garbage_names = disk_cleaner_cfs['ordinary']['garbage'] + disk_cleaner_cfs['deep']['garbage']
+    garbage_names = file_tools.expanduser_and_sort(
+        disk_cleaner_cfs['ordinary']['garbage'] + disk_cleaner_cfs['deep']['garbage'])
     __l2_check(garbage_names)
 
     print('[disk_cleaner] Will do deep clean ...')
@@ -68,27 +70,26 @@ def __l2_check(garbage_names: list[str]):
 
 def __l2_do_clean(garbage_names: list[str]):
     scan_result = disk_cleaner.scan_garbage(garbage_names)
-    if scan_result.dirs:
-        print(
-            f'{Fore.RED}[disk_cleaner] The directories can not be cleaned, please modify the yaml.{Style.RESET_ALL}')
-        dirs = os.linesep.join(scan_result.dirs)
-        print(f'{dirs}')
-        print()
-        exit(1)
     if scan_result.not_exist:
         not_exist = os.linesep.join(scan_result.not_exist)
         print(f'[disk_cleaner] These files not exist, no need to clean.')
-        print(f'{not_exist}')
+        print(not_exist)
         print()
 
-    if scan_result.garbage:
+    if scan_result.dirs:
+        print(f'{Fore.CYAN}[disk_cleaner] These dirs will be cleaned.{Style.RESET_ALL}')
+        for d in scan_result.dirs:
+            print(f'Dir: {d.name}, Children Count: {d.children_count}')
+        print()
+
+    if scan_result.files:
         print(f'{Fore.CYAN}[disk_cleaner] These files will be cleaned.{Style.RESET_ALL}')
-        for g in scan_result.garbage:
+        for g in scan_result.files:
             print(f'File: {g.name}, Size: {g.size}')
         print()
-        cli_input = input(
-            f'{Fore.RED}[disk_cleaner]: Do you want to continue? (y/n): {Style.RESET_ALL}').strip().lower()
-        if cli_input == 'y':
-            disk_cleaner.clean(scan_result.garbage)
-        else:
-            print(f'{Fore.GREEN}[disk_cleaner]: Canceled.{Style.RESET_ALL}')
+
+    cli_input = input(f'{Fore.RED}[disk_cleaner]: Do you want to continue? (y/n): {Style.RESET_ALL}').strip().lower()
+    if cli_input == 'y':
+        disk_cleaner.clean(scan_result.dirs, scan_result.files)
+    else:
+        print(f'{Fore.GREEN}[disk_cleaner]: Canceled.{Style.RESET_ALL}')

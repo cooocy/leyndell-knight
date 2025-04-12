@@ -94,13 +94,45 @@ python leyndell_knight.py oss gc
 
 #### Usage
 
-Run the following command to clean a specified directory:
+Run the following command to clean the specified dirs and files:
 
 ```bash
 python leyndell_knight.py dc <level>
 ```
 
 - `<level>`: ordinary or deep. You can define the garbage in the `config/app.yaml` file.
+
+##### How to define the garbage
+
+```yaml
+disk_cleaner:
+  ordinary:
+    garbage:
+      # Match one file.
+      - '~/.python_history'
+
+      # Match all dirs and files under Downloads dir.
+      - '~/Downloads'
+
+      # Match all files (no dirs) under Downloads dir.
+      - '~/Downloads/*'
+
+      # Match all files (no dirs) which the name starts with 'hello'.
+      # e.g. hello1, hello2 ...
+      - '~/Downloads/hello*'
+
+      # Match all files (no dirs) which the name ends with '.png'.
+      # e.g. a.png, b.png ...
+      - '~/Downloads/*.png'
+
+      # Must be an abs path.
+      # '*' can only have one and must be the last part.
+      # These are not valid.
+      #      - 'a.png'
+      #      - 'c/d/x.png'
+      #      - '/a/*/x.png'
+      #      - '/a/b/c/*xxx*'
+```
 
 ## Configuration
 

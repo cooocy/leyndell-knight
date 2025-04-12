@@ -76,3 +76,20 @@ def find_files_by_wildcard_path(wildcard_path) -> List[str]:
                 matching_files.append(this_file)
 
     return matching_files
+
+
+def expanduser_and_sort(paths: List[str]) -> List[str]:
+    """
+    Expand the `~` symbol in each path to the user\'s home directory and return a sorted list of unique paths.
+
+    Args:
+        paths (List[str]): A list of file or directory paths, potentially containing `~`.
+
+    Returns:
+        List[str]: A sorted list of unique paths with `~` expanded.
+    """
+
+    l = [os.path.expanduser(path) for path in paths]
+    unique_l = list(set(l))
+    unique_l.sort()
+    return unique_l
