@@ -71,20 +71,23 @@ def __l2_check(garbage_names: list[str]):
 def __l2_do_clean(garbage_names: list[str]):
     scan_result = disk_cleaner.scan_garbage(garbage_names)
     if scan_result.not_exist:
-        not_exist = os.linesep.join(scan_result.not_exist)
         print(f'[disk_cleaner] These files not exist, no need to clean.')
-        print(not_exist)
+        for f in scan_result.not_exist:
+            time.sleep(0.2)
+            print(f)
         print()
 
     if scan_result.dirs:
         print(f'{Fore.CYAN}[disk_cleaner] These dirs will be cleaned.{Style.RESET_ALL}')
         for d in scan_result.dirs:
+            time.sleep(0.2)
             print(f'Dir: {d.name}, Children Count: {d.children_count}')
         print()
 
     if scan_result.files:
         print(f'{Fore.CYAN}[disk_cleaner] These files will be cleaned.{Style.RESET_ALL}')
         for g in scan_result.files:
+            time.sleep(0.2)
             print(f'File: {g.name}, Size: {g.size}')
         print()
 

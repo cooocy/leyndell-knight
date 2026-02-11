@@ -3,14 +3,25 @@ disk_cleaner:
     garbage:
       - '~/.V2rayU/v2ray-core.log'
       - '~/.python_history'
+      - '~/nacos'
+      - '~/logs'
+      - '~/log'
+      - '~/.bytertc'
+      - '~/.dubbo'
+      - '~/.gnupg'
+      - '~/.jprofiler12'
+      - '~/.alaya'
+      - '~/.UniVPN'
+      - '~/.arthas'
 
   deep:
     garbage:
+      - '~/Downloads/*'
       - '~/.bash_history'
       - '~/.zsh_history'
       - '~/.zcompdump*'   # cache file for zsh used to accelerate the command completion feature.
-      - '~/Downloads/*'
       - '~/kits/leyndell-knight/oss_helper/logs.txt'
+      - '~/.cache'
 
 oss_helper:
   oss:
