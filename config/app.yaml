@@ -25,9 +25,9 @@ disk_cleaner:
 
 oss_helper:
   oss:
-    access_key_id: x
-    access_key_secret: x
-    endpoint: x
-    bucket: x
+    access_key_id: ${OSS_HELPER_KEY_ID:xx}
+    access_key_secret: ${OSS_HELPER_KEY_SECRET:xx}
+    endpoint: ${OSS_HELPER_ENDPOINT:xx}
+    bucket: ${OSS_HELPER_BUCKET:xx}
 
   log: logs.txt
