@@ -1,6 +1,7 @@
 import copy
 import os.path
 import shutil
+import time
 
 from colorama import Fore, Style
 from dataclasses import dataclass
@@ -111,6 +112,7 @@ def scan_garbage(garbage_names: list[str]) -> ScanResult:
 def clean(dirs: List[Dir], files: List[File]):
     for d in dirs:
         if os.path.exists(d.name):
+            time.sleep(0.2)
             shutil.rmtree(Path(d.name))
             print(
                 f'{Fore.GREEN}[disk_cleaner] Dir: {d.name}, Children Count: {d.children_count}, Removed.{Style.RESET_ALL}')
@@ -119,6 +121,7 @@ def clean(dirs: List[Dir], files: List[File]):
 
     for f in files:
         if os.path.exists(f.name):
+            time.sleep(0.2)
             os.remove(f.name)
             print(f'{Fore.GREEN}[disk_cleaner] File: {f.name}, Size: {f.size}, Removed.{Style.RESET_ALL}')
         else:
